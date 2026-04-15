@@ -19,10 +19,8 @@
 6. [System Architecture & Components](#system-architecture--components)
 7. [API Contracts](#api-contracts)
 8. [Technology Stack](#technology-stack)
-9. [Delivery Roadmap](#delivery-roadmap)
-10. [Team & Sign-Off](#team--sign-off)
-11. [Risk & Mitigation](#risk--mitigation)
-12. [Success Metrics](#success-metrics)
+09. [Risk & Mitigation](#risk--mitigation)
+10. [Success Metrics](#success-metrics)
 
 ---
 
@@ -191,48 +189,47 @@ sequenceDiagram
     participant Browser
     participant API
     participant DB as Database
-    participant Audit as Audit Log
+    participant Audit as AuditLog
 
-    User->>Browser: Enter email + password
+    User->>Browser: Enter email and password
     Browser->>Browser: Validate email format
-    Browser->>Browser: Hash password (BCRYPT)
-    
+    Browser->>Browser: Hash password using BCRYPT
+
     Browser->>API: POST /api/auth/login
-    
-    API->>API: Step 1: Check IP rate limit
-    alt Rate Limited
+
+    API->>API: Check rate limit
+    alt Rate limit exceeded
         API-->>Browser: 429 Too Many Requests
-        API->>Audit: Log violation
-    else OK
-        API->>DB: Step 2: SELECT user WHERE email = ?
+        API->>Audit: Log rate limit violation
+    else Allowed
+        API->>DB: Fetch user by email
         DB-->>API: User record
-        
-        alt User NOT found
+
+        alt User not found
             API-->>Browser: 401 Unauthorized
-            API->>Audit: Log failed attempt
-        else User exists
-            API->>API: Step 3: BCRYPT compare
-            
+            API->>Audit: Log failed login
+        else User found
+            API->>API: Compare password hash
+
             alt Password mismatch
                 API-->>Browser: 401 Unauthorized
-                API->>Audit: Log failed attempt
-            else Password matches
-                API->>API: Step 4: Check email_verified
-                
-                alt NOT verified
+                API->>Audit: Log failed login
+            else Password valid
+                API->>API: Check email verification
+
+                alt Email not verified
                     API-->>Browser: 403 Forbidden
                 else Verified
-                    API->>API: Step 5: Verify user.role
-                    API->>API: Step 6: Generate JWT (HS512)
-                    API->>API: Step 7: Create HttpOnly cookie
-                    
-                    API->>DB: INSERT audit_logs
-                    DB-->>API: Logged
-                    
-                    API-->>Browser: 200 OK + JWT
-                    Browser->>Browser: Store JWT
-                    Browser->>Browser: Add auth header
-                    Browser-->>User: Redirect /dashboard
+                    API->>API: Check user role
+                    API->>API: Generate JWT token
+                    API->>API: Create secure cookie
+
+                    API->>DB: Insert audit log
+                    DB-->>API: Success
+
+                    API-->>Browser: 200 OK with JWT
+                    Browser->>Browser: Store token
+                    Browser-->>User: Redirect to dashboard
                     User->>Browser: Access protected routes
                 end
             end
@@ -278,76 +275,56 @@ flowchart TD
 
 ```mermaid
 graph TD
-    subgraph Client[Client Layer]
+    %% -------- CLIENT --------
+    subgraph Client_Layer
         Browser[User Browser]
         NG[Angular 18 SPA]
-        TweetNaCl[TweetNaCl.js]
+        Crypto[TweetNaCl.js]
     end
-    
-    subgraph Network[Network Layer]
-        HTTPS[HTTPS/TLS 1.3]
+
+    %% -------- NETWORK --------
+    subgraph Network_Layer
+        HTTPS[HTTPS TLS 1.3]
         CDN[CloudFlare CDN]
     end
-    
-    subgraph API[API Layer]
+
+    %% -------- API --------
+    subgraph API_Layer
         LB[Load Balancer]
-        API1[Spring Boot 1]
-        API2[Spring Boot 2]
-        API3[Spring Boot 3]
+        API[Spring Boot Cluster]
     end
-    
-    subgraph Services[Service Layer]
-        JWT[JWT Provider<br/>HS512]
-        RateLim[Rate Limiter<br/>5/min/IP]
-        AuditLog[Audit Logger<br/>SHA-256]
+
+    %% -------- SERVICES --------
+    subgraph Service_Layer
+        JWT["JWT Provider HS512"]
+        RateLim["Rate Limiter 5 per min per IP"]
+        AuditLog["Audit Logger SHA-256"]
     end
-    
-    subgraph Data[Data Layer]
-        PG_Primary[PostgreSQL<br/>Primary]
-        PG_Replica[PostgreSQL<br/>Replica]
-        Redis[Redis Cache]
+
+    %% -------- DATA --------
+    subgraph Data_Layer
+        PG[(PostgreSQL Primary)]
+        Replica[(PostgreSQL Replica)]
+        Redis[(Redis Cache)]
     end
-    
-    subgraph Schema[Database Schema]
-        Users_TBL[users table]
-        Roles_TBL[roles table]
-        Audit_TBL[audit_logs table]
-    end
-    
-    Browser -->|Credentials| NG
-    NG -->|Validate| TweetNaCl
-    TweetNaCl -->|POST /api/auth/login| HTTPS
+
+    %% -------- FLOW --------
+    Browser --> NG
+    NG --> Crypto
+    Crypto --> HTTPS
     HTTPS --> CDN
     CDN --> LB
-    
-    LB --> API1
-    LB --> API2
-    LB --> API3
-    
-    API1 <--> JWT
-    API1 <--> RateLim
-    API1 <--> AuditLog
-    
-    API2 <--> JWT
-    API2 <--> RateLim
-    API2 <--> AuditLog
-    
-    API3 <--> JWT
-    API3 <--> RateLim
-    API3 <--> AuditLog
-    
-    API1 --> PG_Primary
-    API2 --> PG_Primary
-    API3 --> PG_Primary
-    
-    API1 --> Redis
-    API2 --> Redis
-    API3 --> Redis
-    
-    PG_Primary -->|Replication| PG_Replica
-    PG_Primary --> Users_TBL
-    PG_Primary --> Roles_TBL
-    PG_Primary --> Audit_TBL
+    LB --> API
+
+    %% -------- SERVICES --------
+    API --> JWT
+    API --> RateLim
+    API --> AuditLog
+
+    %% -------- DATA --------
+    API --> PG
+    API --> Redis
+    PG -->|Replication| Replica
 ```
 
 ### Frontend (Angular Login Page)

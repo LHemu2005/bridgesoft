@@ -244,31 +244,20 @@ sequenceDiagram
 ### Zero-Trust Validation Pipeline
 
 ```mermaid
-flowchart TD
-    A[Claim Trigger: /api/auth/login] --> B{Step 1: Validate<br/>Email Format}
-    B -->|Valid| C{Step 2: Check<br/>IP Rate Limit}
-    B -->|Invalid| Z[Reject: 400]
+flowchart LR
+    A[POST /api/auth/login] --> B{Email Format Valid?}
     
-    C -->|OK| D{Step 3: User<br/>Exists?}
-    C -->|Exceeded| Y[Reject: 429]
+    B -->|No| Z[400]
+    B -->|Yes| C{Rate Limit OK?}
     
-    D -->|Yes| E{Step 4: Password<br/>Match?}
-    D -->|No| X[Reject: 401]
+    C -->|No| Y[429]
+    C -->|Yes| D{Credentials Valid?}
     
-    E -->|Match| F{Step 5: Email<br/>Verified?}
-    E -->|No| W[Reject: 401]
+    D -->|No| X[401]
+    D -->|Yes| E{Verified & Authorized?}
     
-    F -->|Yes| G{Step 6: User<br/>Role Valid?}
-    F -->|No| V[Reject: 403]
-    
-    G -->|Valid| H[Generate JWT<br/>HS512]
-    G -->|Invalid| U[Reject: 403]
-    
-    H --> I[Create HttpOnly<br/>Cookie]
-    I --> J[Log to Audit<br/>Trail]
-    J --> K[Return 200 OK]
-    K --> L[Issue Token]
-    L --> M[Approve &<br/>Grant Access]
+    E -->|No| W[403]
+    E -->|Yes| F[Generate JWT + Set Cookie + Log + Return 200]
 ```
 
 ### High-Level System Architecture

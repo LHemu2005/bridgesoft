@@ -161,7 +161,7 @@ if (password_hash does NOT match stored hash):
   → Log failed attempt
   → Increment IP rate limit counter
 
-if (IP rate limit exceeded 5/min):
+if (IP rate limit exceeded 3/min):
   → Return 429 (Too Many Requests)
   → Block IP for 60 seconds
   → Log rate limit violation
@@ -804,6 +804,4 @@ Content-Type: application/json
 | **Zero XSS** | 100% | Angular sanitization + CSP header |
 
 ---
-
-**This document is CONFIDENTIAL. Distribute only to authorized team members.**
 

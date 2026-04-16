@@ -1,11 +1,9 @@
 # BridgeSoft Login & Authorization System
 **Secure Login Page with Role-Based Access Control**
 
-**Document Version:** 2.0  
-**Format:** GIG-I Problem-Solution-Architecture  
 **Date Created:** April 15, 2026  
 **Status:** Ready for Development  
-**Last Updated:** April 15, 2026
+**Last Updated:** April 16, 2026
 
 ---
 
@@ -13,14 +11,13 @@
 
 1. [The Problem](#the-problem)
 2. [Our Solution](#our-solution)
-3. [Core Architectural Principles](#core-architectural-principles)
-4. [Authentication & Authorization Rules](#authentication--authorization-rules)
-5. [Login Flow & Security](#login-flow--security)
-6. [System Architecture & Components](#system-architecture--components)
-7. [API Contracts](#api-contracts)
-8. [Technology Stack](#technology-stack)
-09. [Risk & Mitigation](#risk--mitigation)
-10. [Success Metrics](#success-metrics)
+3. [Authentication & Authorization Rules](#authentication--authorization-rules)
+4. [Login Flow & Security](#login-flow--security)
+5. [System Architecture & Components](#system-architecture--components)
+6. [API Contracts](#api-contracts)
+7. [Technology Stack](#technology-stack)
+8. [Risk & Mitigation](#risk--mitigation)
+9. [Success Metrics](#success-metrics)
 
 ---
 
@@ -86,24 +83,6 @@ Applications need secure login pages with proper authentication and authorizatio
 3. **Attack resistance** – rate limiting, input validation, SQL injection/XSS prevention
 4. **Compliance-ready** – audit logs, encryption, session management meet SOC2/GDPR requirements
 5. **Simple to integrate** – 4 REST endpoints, JWT-based, stateless architecture
-
----
-
-## Core Architectural Principles
-
-BridgeSoft Login is built on four core principles:
-
-### 1. **Secure by Default**
-Every credential is encrypted. Every endpoint requires authentication. Every database query is parameterized. Security is baked in, not bolted on.
-
-### 2. **Defense in Depth**
-Multiple overlapping controls. If input validation fails, parameterized queries catch SQL injection. If HTTPS fails, HttpOnly cookies prevent XSS. No single point of failure.
-
-### 3. **Principle of Least Privilege**
-Users get only the permissions they need. Admins can do administrative tasks. Regular users cannot access admin panels. Roles are explicit, not implicit.
-
-### 4. **Observability & Auditability**
-Every login attempt logged. Why was this user approved/rejected? What role was assigned? Audit trail immutable and tamper-proof. Compliance-ready.
 
 ---
 
@@ -786,22 +765,4 @@ Content-Type: application/json
 | 9 | **Missing Audit Logging** | Medium | Medium | Log all login attempts; immutable audit_logs table |
 | 10 | **Authorization Bypass** | Medium | High | Check JWT role claim; enforce role checks on backend (not frontend) |
 
----
-
-## Success Metrics
-
-| Metric | Target | Measurement |
-|---|---|---|
-| **Login Success Rate** | >99% | (successful logins) / (total attempts) |
-| **Login Latency (P99)** | <100ms | 99th percentile response time |
-| **Security Compliance** | 100% | OWASP Top 10 + BCRYPT + TLS 1.3 |
-| **Rate Limiting** | 5/min/IP | Blocks 6th attempt; 60 sec cooldown |
-| **Audit Logging** | 100% | All logins logged (success + failure) |
-| **Code Coverage** | >85% | Unit + integration test lines |
-| **Password Hashing** | BCRYPT 12 | ~100ms per hash; brute-force resistant |
-| **Uptime** | 99.5% | Login endpoint availability |
-| **Zero SQL Injection** | 100% | Parameterized queries enforced |
-| **Zero XSS** | 100% | Angular sanitization + CSP header |
-
----
 

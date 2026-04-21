@@ -33,15 +33,15 @@ import { AuthService } from '../core/auth.service';
         </div>
 
         <!-- Users Table -->
-        <div *ngIf="activeTab === 'users'" class="overflow-x-auto animate-in fade-in slide-in-from-bottom-2">
-          <table class="w-full text-left text-sm text-gray-300">
-            <thead class="bg-white/5 text-gray-400 uppercase text-[10px] tracking-widest">
-              <tr>
-                <th class="px-4 py-4 rounded-tl-xl">User</th>
-                <th class="px-4 py-4">Role</th>
-                <th class="px-4 py-4">Phone</th>
-                <th class="px-4 py-4">Status</th>
-                <th class="px-4 py-4 rounded-tr-xl">Last Login</th>
+        <div *ngIf="activeTab === 'users'" class="max-h-[600px] overflow-y-auto overflow-x-auto scrollbar-thin scrollbar-thumb-white/10 animate-in fade-in slide-in-from-bottom-2 border border-white/5 rounded-2xl">
+          <table class="w-full text-left text-sm text-gray-300 border-collapse">
+            <thead class="sticky top-0 bg-[#0a0c10] z-20 shadow-xl">
+              <tr class="bg-white/5 text-gray-400 uppercase text-[10px] tracking-widest">
+                <th class="px-4 py-4 rounded-tl-xl border-b border-white/5">User</th>
+                <th class="px-4 py-4 border-b border-white/5">Role</th>
+                <th class="px-4 py-4 border-b border-white/5">Phone</th>
+                <th class="px-4 py-4 border-b border-white/5">Status</th>
+                <th class="px-4 py-4 rounded-tr-xl border-b border-white/5">Last Login</th>
               </tr>
             </thead>
             <tbody class="divide-y divide-white/5">
@@ -70,15 +70,15 @@ import { AuthService } from '../core/auth.service';
         </div>
 
         <!-- Audit Logs Table -->
-        <div *ngIf="activeTab === 'logs'" class="overflow-x-auto animate-in fade-in slide-in-from-bottom-2">
-          <table class="w-full text-left text-sm text-gray-300">
-            <thead class="bg-white/5 text-gray-400 uppercase text-[10px] tracking-widest">
-              <tr>
-                <th class="px-4 py-4 rounded-tl-xl">Timestamp</th>
-                <th class="px-4 py-4">Action</th>
-                <th class="px-4 py-4">Entity</th>
-                <th class="px-4 py-4">Status</th>
-                <th class="px-4 py-4 rounded-tr-xl">IP Address</th>
+        <div *ngIf="activeTab === 'logs'" class="max-h-[600px] overflow-y-auto overflow-x-auto scrollbar-thin scrollbar-thumb-white/10 animate-in fade-in slide-in-from-bottom-2 border border-white/5 rounded-2xl">
+          <table class="w-full text-left text-sm text-gray-300 border-collapse">
+            <thead class="sticky top-0 bg-[#0a0c10] z-20 shadow-xl">
+              <tr class="bg-white/5 text-gray-400 uppercase text-[10px] tracking-widest">
+                <th class="px-4 py-4 rounded-tl-xl border-b border-white/5">Timestamp</th>
+                <th class="px-4 py-4 border-b border-white/5">Action</th>
+                <th class="px-4 py-4 border-b border-white/5">Entity</th>
+                <th class="px-4 py-4 border-b border-white/5">Status</th>
+                <th class="px-4 py-4 rounded-tr-xl border-b border-white/5">IP Address</th>
               </tr>
             </thead>
             <tbody class="divide-y divide-white/5">

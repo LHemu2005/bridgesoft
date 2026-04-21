@@ -1,0 +1,46 @@
+# OS Metadata
+.DS_Store
+Thumbs.db
+
+# Node
+node_modules/
+npm-debug.log
+yarn-error.log
+
+# Angular
+.angular/
+dist/
+/*.project
+/*.classpath
+/*.settings
+/.vscode
+/.idea
+
+# Maven
+target/
+pom.xml.tag
+pom.xml.releaseBackup
+pom.xml.versionsBackup
+pom.xml.next
+release.properties
+dependency-reduced-pom.xml
+buildNumber.properties
+.mvn/timing.properties
+.mvn/wrapper/maven-wrapper.jar
+
+# Spring Boot
+.mvn/
+mvnw
+mvnw.cmd
+.help
+application.properties.bak
+
+# Secrets & Environment
+.env
+.env.local
+.env.*.local
+*.jks
+
+# Docker
+.docker/
+docker-compose.override.yml

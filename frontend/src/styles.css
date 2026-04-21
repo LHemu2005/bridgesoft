@@ -1,0 +1,146 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  body {
+    @apply bg-black text-white antialiased overflow-hidden min-h-screen relative;
+  }
+}
+
+@layer utilities {
+  /* Dynamic Background Effects */
+  .animated-waves-bg {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    overflow: hidden;
+    z-index: -1;
+    background-color: #000;
+    perspective: 1000px;
+  }
+
+  .wave-element {
+    position: absolute;
+    border-radius: 40% 60% 70% 30% / 40% 50% 60% 50%;
+    filter: blur(80px);
+    opacity: 0.8;
+    animation: blob-morph 25s infinite ease-in-out alternate, float 30s infinite linear;
+    transition: transform 0.5s cubic-bezier(0.23, 1, 0.32, 1);
+    will-change: transform, border-radius;
+  }
+
+  /* Cursor Tracking Flare */
+  .cursor-glow {
+    position: fixed;
+    width: 600px;
+    height: 600px;
+    background: radial-gradient(circle, rgba(0, 100, 255, 0.15) 0%, transparent 70%);
+    border-radius: 50%;
+    pointer-events: none;
+    z-index: -1;
+    transform: translate(-50%, -50%);
+    filter: blur(50px);
+    transition: top 0.15s ease-out, left 0.15s ease-out;
+  }
+
+  .wave-1 {
+    width: 90vw;
+    height: 50vh;
+    background: radial-gradient(circle, rgba(0, 100, 255, 0.4) 0%, rgba(0, 30, 150, 0.1) 60%, transparent 85%);
+    top: 60%;
+    left: -10%;
+    transform: translateY(-50%);
+    animation-delay: 0s;
+  }
+
+  .wave-2 {
+    width: 120vw;
+    height: 60vh;
+    background: radial-gradient(circle, rgba(0, 120, 255, 0.5) 0%, rgba(0, 60, 255, 0.2) 50%, transparent 80%);
+    bottom: -20%;
+    left: -10%;
+    animation-duration: 25s;
+    animation-delay: -5s;
+    animation-direction: alternate-reverse;
+  }
+
+  .wave-3 {
+    width: 70vw;
+    height: 40vh;
+    background: radial-gradient(circle, rgba(0, 200, 255, 0.3) 0%, rgba(0, 50, 150, 0.1) 60%, transparent 80%);
+    top: 20%;
+    right: -10%;
+    animation-duration: 18s;
+  }
+
+  @keyframes float {
+    0% {
+      transform: translate(0, 0) rotate(0deg);
+    }
+    50% {
+      transform: translate(10vw, 5vh) rotate(10deg);
+    }
+    100% {
+      transform: translate(-5vw, -5vh) rotate(-5deg);
+    }
+  }
+
+  @keyframes blob-morph {
+    0% {
+      border-radius: 40% 60% 70% 30% / 40% 50% 60% 50%;
+    }
+    34% {
+      border-radius: 70% 30% 50% 50% / 30% 30% 70% 70%;
+    }
+    67% {
+      border-radius: 100% 60% 60% 100% / 100% 100% 60% 60%;
+    }
+    100% {
+      border-radius: 40% 60% 70% 30% / 40% 50% 60% 50%;
+    }
+  }
+
+  @keyframes hue-pulse {
+    from { filter: hue-rotate(0deg); }
+    to { filter: hue-rotate(30deg); }
+  }
+
+  /* Glassmorphism Container */
+  .glass-card {
+    background: rgba(25, 25, 25, 0.4);
+    backdrop-filter: blur(24px);
+    -webkit-backdrop-filter: blur(24px);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.8), inset 0 1px 0 rgba(255, 255, 255, 0.1);
+  }
+
+  /* Glass Inputs */
+  .glass-input {
+    background: rgba(15, 15, 15, 0.6);
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    color: white;
+    transition: all 0.2s ease;
+    box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.5);
+  }
+
+  .glass-input:focus {
+    outline: none;
+    background: rgba(25, 25, 25, 0.8);
+    border-color: rgba(255, 255, 255, 0.2);
+    box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.5), 0 0 0 1px rgba(255, 255, 255, 0.05);
+  }
+
+  /* Remove chrome autofill ugly backgrounds */
+  input:-webkit-autofill,
+  input:-webkit-autofill:hover, 
+  input:-webkit-autofill:focus, 
+  input:-webkit-autofill:active{
+    -webkit-box-shadow: 0 0 0 30px #1a1a1a inset !important;
+    -webkit-text-fill-color: white !important;
+    transition: background-color 5000s ease-in-out 0s;
+  }
+
+}
